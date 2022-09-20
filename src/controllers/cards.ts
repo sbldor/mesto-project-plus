@@ -21,8 +21,9 @@ export const createCard = (req: Request, res: Response, next: NextFunction) => {
   };
   return Cards.create(card)
     .then((newCard) => res.send(newCard))
-    .catch(() => {
-      return next(new BadRequestError('Некорректные данные'));
+    .catch((err) => {
+      if (err === 'ValidationError') next(new BadRequestError('Некорректные данные'));
+      return next(err)
     });
 };
 
@@ -35,8 +36,10 @@ export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
       }
       res.send({ message: 'Карточка удалена' });
     })
-    .catch(() => {
-      return next(new BadRequestError('Нет такого пользователя'));
+    .catch((err) => {
+      if (err.name === 'CastError') return next(new NotFoundError('Нет такой карточки'));
+      if (err.name === 'ValidationError') return next(new BadRequestError('Некорректные данные'));
+      return next(err);
     });
 };
 
@@ -50,8 +53,10 @@ export const likeCard = (req: IUserRequest, res: Response, next: NextFunction) =
   )
     .orFail(new NotFoundError('Нет такой карточки'))
     .then((newCard) => res.send({ data: newCard }))
-    .catch(() => {
-      return next(new NotFoundError('Нет такой карточки'));
+    .catch((err) => {
+      if (err.name === 'CastError') return next(new NotFoundError('Нет такой карточки'));
+      if (err.name === 'ValidationError') return next(new BadRequestError('Некорректные данные'));
+      return next(err);
     });
 };
 
@@ -66,8 +71,10 @@ export const dislikeCard = (req: IUserRequest, res: Response, next: NextFunction
     )
       .orFail(new NotFoundError('Нет такой карточки'))
       .then((newCard) => res.send({ data: newCard }))
-      .catch(() => {
-        return next(new NotFoundError('Нет такой карточки'));
+      .catch((err) => {
+        if (err.name === 'CastError') return next(new NotFoundError('Нет такой карточки'));
+        if (err.name === 'ValidationError') return next(new BadRequestError('Некорректные данные'));
+        return next(err);
       });
   }
 };
