@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 
-const errorsHandler = (err: { statusCode?: number, message: string }, req: Request, res: Response, next: NextFunction) => {
+const errorsHandler = (
+  err: { statusCode?: number, message: string },
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { statusCode = 500, message } = err;
 
   res
@@ -10,6 +15,7 @@ const errorsHandler = (err: { statusCode?: number, message: string }, req: Reque
         ? 'На сервере произошла ошибка'
         : message,
     });
+  next();
 };
 
 export default errorsHandler;

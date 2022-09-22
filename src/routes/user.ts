@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { 
+import {
   getUsers,
   createUser,
   getUserById,
   updateUser,
-  updateAvatar
+  updateAvatar,
 } from '../controllers/user';
 
 import validationObjectId from '../errors/validation-object-id';

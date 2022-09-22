@@ -1,13 +1,12 @@
 import { Router } from 'express';
 import validationObjectId from '../errors/validation-object-id';
-import { 
+import {
   getCards,
   createCard,
   deleteCard,
   likeCard,
-  dislikeCard
-} from '../controllers/cards'
-
+  dislikeCard,
+} from '../controllers/cards';
 
 const router = Router();
 
