@@ -6,15 +6,14 @@ import {
   updateAvatar,
   getMyUser,
 } from '../controllers/user';
-
-import validationObjectId from '../errors/validation-object-id';
+import { validationUser, validationAvatar } from '../errors/validation-user';
 
 const router = Router();
 
 router.get('/', getUsers);
-router.get('/:id', validationObjectId, getUserById);
+router.get('/:id', getUserById);
 router.get('/me', getMyUser);
-router.post('/me', updateUser);
-router.post('/me/avatar', updateAvatar);
+router.post('/me', validationUser, updateUser);
+router.post('/me/avatar', validationAvatar, updateAvatar);
 
 export default router;

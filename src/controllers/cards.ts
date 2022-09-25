@@ -3,6 +3,7 @@ import Cards from '../models/cards';
 import { IUserRequest } from '../types/types';
 import BadRequestError from '../errors/bad-request-error';
 import NotFoundError from '../errors/not-found-error';
+import ForbiddenError from '../errors/forbidden-error';
 
 const { Types } = require('mongoose');
 
@@ -42,7 +43,7 @@ export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
           .then(() => res.status(200).send({ message: 'Карточка удалена!' }))
           .catch(next);
       } else {
-        next(new BadRequestError('Удаление не возможно, вы не автор карточки'));
+        next(new ForbiddenError('Удаление не возможно, вы не автор карточки'));
       }
     })
     .catch((err) => {
