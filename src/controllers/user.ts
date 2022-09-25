@@ -8,7 +8,7 @@ import { IUserRequest } from '../types/types';
 
 export const getUsers = (req: Request, res: Response, next: NextFunction) => {
   User.find({})
-    .then((users) => res.send({ data: users }))
+    .then((users) => res.status(200).send({ data: users }))
     .catch(next);
 };
 
@@ -52,7 +52,7 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
         'super-strong-secret',
         { expiresIn: '7d' },
       );
-      res.send({ token });
+      res.status(201).send({ token });
     })
     .catch(next);
 };
@@ -60,7 +60,7 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
 export const getUserById = (req: Request, res: Response, next: NextFunction) => {
   User.findById(req.params.id)
     .orFail(() => new NotFoundError('Нет такого пользователя'))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
         return next(new NotFoundError('Нет такого пользователя'));
@@ -78,7 +78,7 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
     runValidators: true,
   })
     .orFail(() => new NotFoundError('Нет такого пользователя'))
-    .then((user) => res.send(user))
+    .then((user) => res.status(201).send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         return next(new BadRequestError('Нет такого пользователя'));
@@ -95,7 +95,7 @@ export const updateAvatar = (req: Request, res: Response, next: NextFunction) =>
     new: true,
     runValidators: true,
   })
-    .then((user) => res.send(user))
+    .then((user) => res.status(201).send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         return next(new BadRequestError('Нет такого пользователя'));
@@ -110,7 +110,7 @@ export const updateAvatar = (req: Request, res: Response, next: NextFunction) =>
 export const getMyUser = (req: IUserRequest, res: Response, next: NextFunction) => {
   User.findById(req.user?._id)
     .orFail(() => new NotFoundError('Нет такого пользователя'))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err.name === 'CastError') {
         return next(new NotFoundError('Пользователь не найден'));
