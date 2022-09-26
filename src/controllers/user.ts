@@ -53,7 +53,7 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
         'super-strong-secret',
         { expiresIn: '7d' },
       );
-      res.status(201).send({ token });
+      res.status(200).send({ token });
     })
     .catch(next);
 };
@@ -79,7 +79,7 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
     runValidators: true,
   })
     .orFail(() => new NotFoundError('Нет такого пользователя'))
-    .then((user) => res.status(201).send(user))
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         return next(new BadRequestError('Нет такого пользователя'));
@@ -96,7 +96,7 @@ export const updateAvatar = (req: Request, res: Response, next: NextFunction) =>
     new: true,
     runValidators: true,
   })
-    .then((user) => res.status(201).send(user))
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
         return next(new BadRequestError('Нет такого пользователя'));
